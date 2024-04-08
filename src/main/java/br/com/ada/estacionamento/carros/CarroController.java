@@ -14,16 +14,28 @@ public class CarroController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/carros")
     public ResponseEntity<Carro> cadastrarCarro(@RequestBody Carro carro){
         service.cadastrarCarro(carro);
         return ResponseEntity.created(null).body(carro);
     }
 
-    @PostMapping
-    public ResponseEntity<Carro> estacionar(@RequestBody Carro carro){
-        service.estacionar(carro);
+    @PostMapping("/carros/estacionar")
+    public ResponseEntity<?> estacionar(@RequestBody Carro carro){
+        boolean sucesso = service.estacionar(carro);
+        if (sucesso) {
+            return ResponseEntity.ok(carro);
+        } else {
+            return ResponseEntity.badRequest().body("Falha ao estacionar o carro. Vaga ocupada.");
+        }
+    }
+
+    @PostMapping("/carros/retirar")
+    public ResponseEntity<?> retirarCarro(@RequestBody Carro carro){
+        service.retirarCarro(carro);
         return ResponseEntity.ok(carro);
     }
 
 }
+
+
